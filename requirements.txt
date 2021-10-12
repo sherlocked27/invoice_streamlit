@@ -1,0 +1,6 @@
+numpy==1.19.5
+pandas==1.3.3
+gradio==2.3.5
+streamlit==0.89.0
+htbuilder==0.5.0
+Pillow==8.3.2
