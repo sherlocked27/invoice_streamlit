@@ -1,8 +1,6 @@
 import streamlit as st
 # To make things easier later, we're also importing numpy and pandas for
 # working with sample data.
-import numpy as np
-import pandas as pd
 from PIL import Image
 import time
 from htbuilder import HtmlElement, div, ul, li, br, hr, a, p, img, styles, classes, fonts
@@ -91,11 +89,11 @@ with st.form(key='my_form'):
 st.subheader(" Choose from the demo images for quick view")
 with st.form(key='my_form_2'):
     image_demo1 = Image.open(
-        "/Users/risbajar/Downloads/Sample-Invoice/inv-5.jpg")
+        "https://raw.githubusercontent.com/sherlocked27/invoice_streamlit/main//images/demo/inv-1.jpg")
     image_demo2 = Image.open(
-        "/Users/risbajar/Downloads/Sample-Invoice/inv-5.jpg")
+        "https://raw.githubusercontent.com/sherlocked27/invoice_streamlit/main//images/demo/inv-2.png")
     image_demo3 = Image.open(
-        "/Users/risbajar/Downloads/Sample-Invoice/inv-5.jpg")
+        "https://raw.githubusercontent.com/sherlocked27/invoice_streamlit/main//images/demo/inv-3.png")
     col1, col2, col3 = st.columns(3)
     submit_button_2 = col1.form_submit_button(label='Use Demo 1')
     submit_button_3 = col2.form_submit_button(label='Use Demo 2')
@@ -124,7 +122,7 @@ if submit_button:
     coll2.image(image)
     st.subheader("JSON Response")
     st.write({"words": {"buyer_address": "Survey # 78/10, A-2-0 Chikkajala Village A2 Bellary Road  Bengaluru, Karnataka, 562157  India", "buyer_gstin": "29AAACL9861H1Z2", "buyer_name": "India Private Limited", "invoice_date": "2/6/2020", "supplier_address": "Address: 3/8 Ground Floor, Opp. MG Infant School, Kodichikkanahalli Road, Bilekahalli,", "supplier_name": "HAPPY EARTH ENTERPRISES",
-             "supplier_email": "orders@happyearth.in"}, "bbox": {"buyer_address": [238, 1248, 1418, 1595], "buyer_gstin": [450, 1665, 1035, 1761], "buyer_name": [747, 1165, 1361, 1262], "invoice_date": [118, 632, 436, 741], "supplier_address": [2671, 290, 3943, 476], "supplier_name": [2718, 198, 3784, 301], "supplier_email": [3280, 540, 3939, 649]}, "width": 4134, "height": 5847})
+                        "supplier_email": "orders@happyearth.in"}, "bbox": {"buyer_address": [238, 1248, 1418, 1595], "buyer_gstin": [450, 1665, 1035, 1761], "buyer_name": [747, 1165, 1361, 1262], "invoice_date": [118, 632, 436, 741], "supplier_address": [2671, 290, 3943, 476], "supplier_name": [2718, 198, 3784, 301], "supplier_email": [3280, 540, 3939, 649]}, "width": 4134, "height": 5847})
 footer()
 # Add a placeholder
 # latest_iteration = st.empty()
