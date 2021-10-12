@@ -79,7 +79,7 @@ target/
 
 *.jpg
 *.png
-
+demo.py
 # IPython
 profile_default/
 ipython_config.py

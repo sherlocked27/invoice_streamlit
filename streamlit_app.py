@@ -4,6 +4,7 @@ import streamlit as st
 from PIL import Image
 import urllib.request
 import time
+import requests
 from htbuilder import HtmlElement, div, ul, li, br, hr, a, p, img, styles, classes, fonts
 from htbuilder.units import percent, px
 from htbuilder.funcs import rgba, rgb
@@ -124,15 +125,30 @@ if submit_button_4:
 
 if submit_button:
     print(type(image))
+    image = image.convert('RGB')
+    image.save("input.jpg")
+    with open("input.jpg", "rb") as f:
+        img_byte = f.read()
+
     coll1, coll2 = st.columns(2)
     coll1.header("Invoice")
     coll1.image(image)
 
+    url = "https://q3d0rlossg.execute-api.us-east-1.amazonaws.com/default/invoiceExtraction"
+
+    payload = img_byte
+    headers = {
+        'x-api-key': 'CX3UHP936F9Ww0vE9BtDy5rp7h6vZqeQ7PjbdXbA',
+        'Content-Type': 'text/plain'
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+
     coll2.header("Result")
     coll2.image(image)
     st.subheader("JSON Response")
-    st.write({"words": {"buyer_address": "Survey # 78/10, A-2-0 Chikkajala Village A2 Bellary Road  Bengaluru, Karnataka, 562157  India", "buyer_gstin": "29AAACL9861H1Z2", "buyer_name": "India Private Limited", "invoice_date": "2/6/2020", "supplier_address": "Address: 3/8 Ground Floor, Opp. MG Infant School, Kodichikkanahalli Road, Bilekahalli,", "supplier_name": "HAPPY EARTH ENTERPRISES",
-                        "supplier_email": "orders@happyearth.in"}, "bbox": {"buyer_address": [238, 1248, 1418, 1595], "buyer_gstin": [450, 1665, 1035, 1761], "buyer_name": [747, 1165, 1361, 1262], "invoice_date": [118, 632, 436, 741], "supplier_address": [2671, 290, 3943, 476], "supplier_name": [2718, 198, 3784, 301], "supplier_email": [3280, 540, 3939, 649]}, "width": 4134, "height": 5847})
+    st.write(response.json())
+
 footer()
 # Add a placeholder
 # latest_iteration = st.empty()
