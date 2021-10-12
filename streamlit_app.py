@@ -34,7 +34,6 @@ def layout(*args):
         bottom=0,
         margin=px(0, 0, 0, 0),
         width=percent(100),
-        color="black",
         text_align="center",
         height="auto",
         opacity=1
@@ -71,9 +70,9 @@ def layout(*args):
 
 def footer():
     myargs = [
-        "Made in ",
-        image1('https://avatars3.githubusercontent.com/u/45109972?s=400&v=4',
-               width=px(25), height=px(25)),
+        "Made in Streamlit",
+        # image1('https://avatars3.githubusercontent.com/u/45109972?s=400&v=4',
+        #        width=px(25), height=px(25)),
         " with ❤️ by ",
         link("https://www.linkedin.com/in/rishibajargan/", "Rishi Bajargan"),
         " and ",
