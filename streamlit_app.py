@@ -2,6 +2,7 @@ import streamlit as st
 # To make things easier later, we're also importing numpy and pandas for
 # working with sample data.
 from PIL import Image
+import urllib.request
 import time
 from htbuilder import HtmlElement, div, ul, li, br, hr, a, p, img, styles, classes, fonts
 from htbuilder.units import percent, px
@@ -88,12 +89,21 @@ with st.form(key='my_form'):
 
 st.subheader(" Choose from the demo images for quick view")
 with st.form(key='my_form_2'):
+    urllib.request.urlretrieve(
+        'https://raw.githubusercontent.com/sherlocked27/invoice_streamlit/main//images/demo/inv-1.jpg',
+        "inv-1.jpg")
     image_demo1 = Image.open(
-        "https://raw.githubusercontent.com/sherlocked27/invoice_streamlit/main//images/demo/inv-1.jpg")
+        "inv-1.jpg")
+    urllib.request.urlretrieve(
+        'https://raw.githubusercontent.com/sherlocked27/invoice_streamlit/main//images/demo/inv-2.png',
+        "inv-2.png")
     image_demo2 = Image.open(
-        "https://raw.githubusercontent.com/sherlocked27/invoice_streamlit/main//images/demo/inv-2.png")
+        "inv-2.png")
+    urllib.request.urlretrieve(
+        'https://raw.githubusercontent.com/sherlocked27/invoice_streamlit/main//images/demo/inv-3.png',
+        "inv-3.png")
     image_demo3 = Image.open(
-        "https://raw.githubusercontent.com/sherlocked27/invoice_streamlit/main//images/demo/inv-3.png")
+        "inv-3.png")
     col1, col2, col3 = st.columns(3)
     submit_button_2 = col1.form_submit_button(label='Use Demo 1')
     submit_button_3 = col2.form_submit_button(label='Use Demo 2')
