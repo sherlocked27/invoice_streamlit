@@ -81,7 +81,41 @@ def footer():
     layout(*myargs)
 
 
+@st.cache(suppress_st_warning=True, show_spinner=False)
+def load_model(a):
+    gif_path = "/Users/risbajar/Downloads/processing.gif"
+    placeholder = st.empty()
+    col11, col21, col31 = placeholder.columns([4, 5, 4])
+
+    with col11:
+        st.write("")
+
+    with col21:
+        gif_runner = st.image(gif_path)
+        st.write(
+            "Loading model, just a min! We can't have it running 24/7, so... :)")
+
+    with col31:
+        st.write("")
+
+    # Initial Call to Start Servers !
+    url = "https://q3d0rlossg.execute-api.us-east-1.amazonaws.com/default/invoiceContainer"
+    payload = ""
+    headers = {
+        'x-api-key': '4KQfn4znnK8caRlTklZrFcUNNJvB6oFuWFKF4dh0',
+        'Content-Type': 'text/plain'
+    }
+    response = requests.request("POST", url, headers=headers, data=payload)
+    time.sleep(5)
+    initial_load = True
+    placeholder.empty()
+    return a
+
+
 st.title('Invoice Extraction')
+footer()
+load_model("abc")
+# st.write("")
 
 with st.form(key='my_form'):
     image = st.file_uploader(label='Upload invoice image')
@@ -90,17 +124,17 @@ with st.form(key='my_form'):
 st.subheader(" Choose from the demo images for quick view")
 with st.form(key='my_form_2'):
     urllib.request.urlretrieve(
-        'https://raw.githubusercontent.com/sherlocked27/invoice_streamlit/main//images/demo/inv-1.jpg',
+        'https://raw.githubusercontent.com/sherlocked27/invoice_streamlit/main/images/demo/inv-1.jpg',
         "inv-1.jpg")
     image_demo1 = Image.open(
         "inv-1.jpg")
     urllib.request.urlretrieve(
-        'https://raw.githubusercontent.com/sherlocked27/invoice_streamlit/main//images/demo/inv-2.png',
+        'https://raw.githubusercontent.com/sherlocked27/invoice_streamlit/main/images/demo/inv-2.png',
         "inv-2.png")
     image_demo2 = Image.open(
         "inv-2.png")
     urllib.request.urlretrieve(
-        'https://raw.githubusercontent.com/sherlocked27/invoice_streamlit/main//images/demo/inv-3.png',
+        'https://raw.githubusercontent.com/sherlocked27/invoice_streamlit/main/images/demo/inv-3.png',
         "inv-3.png")
     image_demo3 = Image.open(
         "inv-3.png")
@@ -148,7 +182,7 @@ if submit_button:
     st.subheader("JSON Response")
     st.write(response.json())
 
-footer()
+
 # Add a placeholder
 # latest_iteration = st.empty()
 # bar = st.progress(0)
