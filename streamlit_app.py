@@ -133,11 +133,11 @@ if submit_button:
     coll1.header("Invoice")
     coll1.image(image)
 
-    url = "https://q3d0rlossg.execute-api.us-east-1.amazonaws.com/default/invoiceExtraction"
+    url = "https://q3d0rlossg.execute-api.us-east-1.amazonaws.com/default/invoiceContainer"
 
     payload = img_byte
     headers = {
-        'x-api-key': 'CX3UHP936F9Ww0vE9BtDy5rp7h6vZqeQ7PjbdXbA',
+        'x-api-key': '4KQfn4znnK8caRlTklZrFcUNNJvB6oFuWFKF4dh0',
         'Content-Type': 'text/plain'
     }
 
