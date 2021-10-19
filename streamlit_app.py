@@ -1,13 +1,20 @@
 import streamlit as st
 # To make things easier later, we're also importing numpy and pandas for
 # working with sample data.
-from PIL import Image
+from PIL import Image, ImageFont, ImageDraw
 import urllib.request
 import time
 import requests
 from htbuilder import HtmlElement, div, ul, li, br, hr, a, p, img, styles, classes, fonts
 from htbuilder.units import percent, px
 from htbuilder.funcs import rgba, rgb
+st.set_page_config(
+    page_title="Invoice Magic",
+    page_icon="🪄",
+    menu_items={
+        'About': "### This is an *extremely* cool app! Look at footer to contact :)"
+    }
+)
 
 
 def image1(src_as_string, **style):
@@ -81,19 +88,17 @@ def footer():
     layout(*myargs)
 
 
-@st.cache(suppress_st_warning=True, show_spinner=False)
-def load_model(a):
-    gif_path = "/Users/risbajar/Downloads/processing.gif"
-    placeholder = st.empty()
-    col11, col21, col31 = placeholder.columns([4, 5, 4])
+def load_model():
+    gif1_path = "./images/processing.gif"
+    placeholder1 = st.empty()
+    col11, col21, col31 = placeholder1.columns([4, 5, 4])
 
     with col11:
         st.write("")
 
     with col21:
-        gif_runner = st.image(gif_path)
-        st.write(
-            "Loading model, just a min! We can't have it running 24/7, so... :)")
+        st.image(
+            gif1_path, caption="Loading model, just a min! We can't have it running 24/7, Please bear ... :)")
 
     with col31:
         st.write("")
@@ -107,15 +112,35 @@ def load_model(a):
     }
     response = requests.request("POST", url, headers=headers, data=payload)
     time.sleep(5)
-    initial_load = True
-    placeholder.empty()
-    return a
+    placeholder1.empty()
+    return
+
+
+def save_labelled(ans):
+    new_image = Image.open("input.jpg")
+    img1 = ImageDraw.Draw(new_image)
+    width, height = new_image.size
+    to_add = [width*0.0042,  height*0.0042]
+
+    for k, v in ans["bbox"].items():
+        img1.rectangle(v, outline="green", width=3)
+        myFont = ImageFont.truetype(
+            './FreeMono.ttf', 20)
+        img1.text((v[0]-to_add[0]*6, v[1] - to_add[1]*6),
+                  k, font=myFont, fill=(255, 0, 0))
+    return new_image
 
 
 st.title('Invoice Extraction')
 footer()
-load_model("abc")
+if 'load_model' not in st.session_state:
+    st.session_state.load_model = True
+
+if(st.session_state.load_model == True):
+    load_model()
+    st.session_state.load_model = False
 # st.write("")
+
 
 with st.form(key='my_form'):
     image = st.file_uploader(label='Upload invoice image')
@@ -123,21 +148,12 @@ with st.form(key='my_form'):
 
 st.subheader(" Choose from the demo images for quick view")
 with st.form(key='my_form_2'):
-    urllib.request.urlretrieve(
-        'https://raw.githubusercontent.com/sherlocked27/invoice_streamlit/main/images/demo/inv-1.jpg',
-        "inv-1.jpg")
     image_demo1 = Image.open(
-        "inv-1.jpg")
-    urllib.request.urlretrieve(
-        'https://raw.githubusercontent.com/sherlocked27/invoice_streamlit/main/images/demo/inv-2.png',
-        "inv-2.png")
+        "./images/demo/inv-1.jpg")
     image_demo2 = Image.open(
-        "inv-2.png")
-    urllib.request.urlretrieve(
-        'https://raw.githubusercontent.com/sherlocked27/invoice_streamlit/main/images/demo/inv-3.png',
-        "inv-3.png")
+        "./images/demo/inv-2.png")
     image_demo3 = Image.open(
-        "inv-3.png")
+        "./images/demo/inv-3.png")
     col1, col2, col3 = st.columns(3)
     submit_button_2 = col1.form_submit_button(label='Use Demo 1')
     submit_button_3 = col2.form_submit_button(label='Use Demo 2')
@@ -157,7 +173,6 @@ if submit_button_4:
     submit_button = True
 
 if submit_button:
-    print(type(image))
     image = image.convert('RGB')
     image.save("input.jpg")
     with open("input.jpg", "rb") as f:
@@ -167,28 +182,19 @@ if submit_button:
     coll1.header("Invoice")
     coll1.image(image)
 
-    url = "https://q3d0rlossg.execute-api.us-east-1.amazonaws.com/default/invoiceContainer"
+    with st.spinner('Model Running...'):
+        url = "https://q3d0rlossg.execute-api.us-east-1.amazonaws.com/default/invoiceContainer"
 
-    payload = img_byte
-    headers = {
-        'x-api-key': '4KQfn4znnK8caRlTklZrFcUNNJvB6oFuWFKF4dh0',
-        'Content-Type': 'text/plain'
-    }
+        payload = img_byte
+        headers = {
+            'x-api-key': '4KQfn4znnK8caRlTklZrFcUNNJvB6oFuWFKF4dh0',
+            'Content-Type': 'text/plain'
+        }
 
-    response = requests.request("POST", url, headers=headers, data=payload)
+        response = requests.request("POST", url, headers=headers, data=payload)
 
+    ans = response.json()
     coll2.header("Result")
-    coll2.image(image)
+    coll2.image(save_labelled(ans))
     st.subheader("JSON Response")
-    st.write(response.json())
-
-
-# Add a placeholder
-# latest_iteration = st.empty()
-# bar = st.progress(0)
-
-# for i in range(100):
-#     # Update the progress bar with each iteration.
-#     latest_iteration.text(f'Iteration {i+1}')
-#     bar.progress(i + 1)
-#     time.sleep(0.1)
+    st.write(ans)
