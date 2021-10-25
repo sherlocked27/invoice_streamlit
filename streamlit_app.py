@@ -111,7 +111,7 @@ def load_model():
         'Content-Type': 'text/plain'
     }
     response = requests.request("POST", url, headers=headers, data=payload)
-    time.sleep(5)
+    time.sleep(2)
     placeholder1.empty()
     return
 
@@ -143,7 +143,8 @@ if(st.session_state.load_model == True):
 
 
 with st.form(key='my_form'):
-    image = st.file_uploader(label='Upload invoice image')
+    uploaded_file = st.file_uploader(
+        label='Upload invoice image (.jpg or .png format)')
     submit_button = st.form_submit_button(label='Submit')
 
 st.subheader(" Choose from the demo images for quick view")
@@ -159,6 +160,8 @@ with st.form(key='my_form_2'):
     submit_button_3 = col2.form_submit_button(label='Use Demo 2')
     submit_button_4 = col3.form_submit_button(label='Use Demo 3')
 
+if submit_button:
+    image = Image.open(uploaded_file)
 
 if submit_button_2:
     image = image_demo1
@@ -195,6 +198,7 @@ if submit_button:
 
     ans = response.json()
     coll2.header("Result")
-    coll2.image(save_labelled(ans))
+    if("bbox" in ans):
+        coll2.image(save_labelled(ans))
     st.subheader("JSON Response")
     st.write(ans)
